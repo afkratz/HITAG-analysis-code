@@ -4,7 +4,6 @@ This repository contains the code and configuration files needed to analyze our 
 
 
 
-[TOC]
 
 #### Description
 
