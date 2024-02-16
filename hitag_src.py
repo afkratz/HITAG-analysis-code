@@ -124,6 +124,7 @@ def make_genome_index():
 
 def make_other_index(index_input_file):
     if not os.path.exists('indexes'):os.mkdir('indexes')
+    _,index_input_file = os.path.split(index_input_file)
     name,ext = os.path.splitext(index_input_file)
     if not os.path.exists(os.path.join("indexes","{}.1.bt2".format(name))):
         command = ['bowtie2-build', '--threads','8', '-f', index_input_file,'indexes/{}'.format(name)]
@@ -132,6 +133,7 @@ def make_other_index(index_input_file):
     
     
 def run_bowtie(input_file_name:str,linker_file_name:str,output_file_name:str):
+    _,linker_file_name = os.path.split(linker_file_name)
     linker_name,ext = os.path.splitext(linker_file_name)
     command = ['bowtie2',
                '-x',os.path.join('indexes',linker_name), #Target library of sequences
