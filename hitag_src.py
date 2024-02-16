@@ -124,8 +124,8 @@ def make_genome_index():
 
 def make_other_index(index_input_file):
     if not os.path.exists('indexes'):os.mkdir('indexes')
-    _,index_input_file = os.path.split(index_input_file)
-    name,ext = os.path.splitext(index_input_file)
+    _,index_input_file_name = os.path.split(index_input_file)
+    name,ext = os.path.splitext(index_input_file_name)
     if not os.path.exists(os.path.join("indexes","{}.1.bt2".format(name))):
         command = ['bowtie2-build', '--threads','8', '-f', index_input_file,'indexes/{}'.format(name)]
         print(command)
