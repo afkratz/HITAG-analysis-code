@@ -513,14 +513,33 @@ def process_read(res:Tuple[SAMResult,SAMResult],targets:List[GuideRNA],debug=Fal
 
 
 def results_to_df(results,targets,debug=False)->pd.DataFrame:
-    processed_reads= dict()
+    """
+    Pops through the list of results, processing each result and 
+    then assigning it to a dataframe, dropping processed reads 
+    to limit memory usage
+    """
     bar = Bar("Processing alignments...",max=len(results),suffix='%(index)i / %(max)i - %(eta)ds')
-    for i in range(len(results)):
+    i=0
+    while results:
         if(i%100==0):bar.next(100)
-        processed_read = process_read(results[i],targets,debug=debug)
-        processed_reads[i] = processed_read
-    bar.finish()
-    df = pd.DataFrame.from_dict(processed_reads, orient='index')           
+
+        #For now we don't want to change the length of the list of results because we use this length later
+        result = results[-1]
+        #Process this read to categorize it
+        processed_read = process_read(result,targets,debug=debug)#returns a dict of form column: value at that row
+
+        #If we are on the first line, create the dataframe to hold the results
+        if i==0:
+            df = pd.DataFrame(index = range(len(results)),columns = processed_read.keys())
+
+        #Assign this result to its row
+        df.iloc[i]=processed_read
+
+        #Increment counter, remove last element
+        i+=1
+        results.pop()
+
+    bar.finish()         
     return df
 
 
