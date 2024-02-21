@@ -537,7 +537,7 @@ def run_analysis(
     make_genome_index()
     make_other_index(linker_file_name)
     if use_cache and os.path.exists('{}_aligned_linker.sam'.format(output)) and os.path.exists('{}_aligned_genome.sam'.format(output)):
-        print("Using cached alingments")
+        print("Using cached alignments")
     else:
         run_bowtie(input_file_name=input_file_name,linker_file_name=linker_file_name,output_file_name=output)  
     results = load_results(output)
