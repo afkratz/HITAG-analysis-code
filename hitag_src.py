@@ -530,12 +530,16 @@ def run_analysis(
         output:str,
         guides:List[GuideRNA],
         debug:bool,
+        use_cache:bool = True,
         ):
     if not os.path.exists('indexes'):
         os.mkdir('indexes')
     make_genome_index()
     make_other_index(linker_file_name)
-    run_bowtie(input_file_name=input_file_name,linker_file_name=linker_file_name,output_file_name=output)  
+    if use_cache and os.path.exists('{}_aligned_linker.sam'.format(output)) and os.path.exists('{}_aligned_genome.sam'.format(output)):
+        print("Using cached alingments")
+    else:
+        run_bowtie(input_file_name=input_file_name,linker_file_name=linker_file_name,output_file_name=output)  
     results = load_results(output)
-    df=results_to_df(results,guides)
+    df=results_to_df(results,guides,debug=debug)
     df.to_csv(os.path.join('results','{}_outputs.csv'.format(output)))
